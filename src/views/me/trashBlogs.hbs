@@ -1,0 +1,146 @@
+<div class="mt-4">
+
+  <h3>My trash</h3>
+  <a href="/me/store/blogs">blogs list</a>
+  <table class="table mt-4">
+    <thead>
+      <tr>
+        <th scope="col">_id</th>
+        <th scope="col">Name Blogs</th>
+        <th scope="col">Level</th>
+        <th scope="col">Time create</th>
+        <th scope="col">edit</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each blogs}}
+        <tr>
+          <th scope="row">{{sum @index 1}}</th>
+          <td>{{this.name}}</td>
+          <td>{{this.level}}</td>
+          <td>{{this.createdAt}}</td>
+          <td>
+            <a
+              id="dataid"
+              href=""
+              class="btn-link btn-restore"
+              data-id="{{this._id}}"
+            >restore</a>
+            <a
+              href=""
+              class="btn-link"
+              data-id="{{this._id}}"
+              data-bs-toggle="modal"
+              data-bs-target="#exampleModal"
+            >delete</a>
+          </td>
+        </tr>
+      {{else}}
+        <tr>
+          <td colspan="5" class="text-center">
+            Thùng rác trống. <a href="/me/store/blogs"> Quay lại</a>
+          </td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>
+
+{{! confirm delete blog }}
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="exampleModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Warning</h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        confirm delete
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+        >Close</button>
+        <button
+          id="btn-delete-blogs"
+          type="button"
+          class="btn btn-danger"
+        >Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{! form hidden action delete }}
+{{! tạo thẻ form ẩn để xác thực phương thức delete }}
+<form METHOD="POST" name="form-delete-blogs"></form>
+<form METHOD="POST" name="form-restore-blogs"></form>
+
+{{! confirm delete js }}
+<script>
+
+    document.addEventListener( 'DOMContentLoaded', function() {
+        
+
+        const exampleModal = document.getElementById('exampleModal');
+        var dataId;
+        var formDeleteBlogs = document.forms['form-delete-blogs'];
+        var formRestoreBlogs = document.forms['form-restore-blogs'];
+
+        const btnDeleteBlogs = document.getElementById('btn-delete-blogs'); 
+        const btnRestoreBlogs = document.getElementById('dataid'); 
+        if (exampleModal) {
+            exampleModal.addEventListener('show.bs.modal', event => { 
+                // Button that triggered the modal 
+                const button = event.relatedTarget 
+                // Extract info from data-bs-* attributes 
+                dataId = button.getAttribute('data-id')
+            })
+        }
+        // when click btn-delete blog
+        btnDeleteBlogs.addEventListener("click",function() {
+            formDeleteBlogs.action = '/blogs/' + dataId + '/force?_method=DELETE';
+            formDeleteBlogs.submit() 
+        })
+
+        const btnrestoreBlogs = $('.btn-restore')
+        btnrestoreBlogs.click(function(event) {
+            event.preventDefault();
+            // get data-"id" in attribute
+            const data_Id = $(this).data('id');
+            formRestoreBlogs.action = '/blogs/' + data_Id + '/restore?_method=PATCH';
+            formRestoreBlogs.submit();
+        })
+    })
+</script>
+
+{{!-- 
+
+ --}}
+
+{{!-- 
+
+        if (btnRestoreBlogs) {
+          const data_Id = btnRestoreBlogs.getAttribute('data-id')
+          btnRestoreBlogs.addEventListener("click",function(event) {
+            event.preventDefault();
+            formRestoreBlogs.action = '/blogs/' + data_Id + '/restore?_method=PATCH';
+            formRestoreBlogs.submit() 
+          })
+        }
+
+ --}}

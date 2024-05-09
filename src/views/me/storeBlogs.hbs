@@ -1,0 +1,155 @@
+<form class="mt-4" method="POST" action="/blogs/handleFormActions" name="container-form">
+  <h3>My blogs</h3>
+  <a href="/me/trash/blogs" style="text-decoration: none;">Trash ({{deletedCount}})</a>
+  <div class="mt-4 d-flex align-item-center">
+    <div class="form-check ">
+      <input class="form-check-input" type="checkbox" value="" id="checkbox-all">
+      <label class="form-check-label" for="checkbox-all">
+        Chọn tất cả
+      </label>
+    </div>
+    {{!-- form option --}}
+    <select class="form-control form-control-sm " style="width:20vw; margin:0 2rem" aria-label="Default select example" name="action" required>
+      <option value="" disabled selected>--choose blogs--</option>
+      <option value="delete">delete</option>
+    </select>
+    <button class="btn btn-primary btn-sm checked-submit-btn" disabled>submit</button>
+  </div>
+  <table class="table mt-4">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col"></th>
+        <th scope="col">Name blogs {{{sortable "name" _sort}}}</th>
+        <th scope="col">Level {{{sortable "level" _sort}}}</th>
+        <th scope="col">Time create {{{sortable "time" _sort}}}</th>
+        <th scope="col">edit {{{sortable "edit" _sort}}}</th>
+      </tr>
+    </thead>
+    <tbody>
+    {{#each blogs}}
+      <tr>
+        <td>
+          <input class="form-check-input" type="checkbox" value="{{this._id}}" name="blogIDs[]">
+        </td>      
+        <th scope="row">{{sum @index 1}}</th>
+        <td>{{this.name}}</td>
+        <td>{{this.level}}</td>
+        <td>{{this.createdAt}}</td>
+        <td >
+          <a href="/blogs/{{this._id}}/edit" class="btn-link">fixed</a>
+          <a href="/" class="btn-link" data-id="{{this._id}}" data-bs-toggle="modal" data-bs-target="#exampleModal">delete</a>
+        </td>
+      </tr>
+      {{else}}
+      <tr>
+        <td colspan="5" class="text-center">
+          Bạn chưa đăng tin tức nào. <a href="/blogs/create">Đăng tin tức</a>
+        </td>
+      </tr>
+    {{/each}}
+    </tbody>
+  </table>
+</form>
+
+{{!-- confirm delete blog --}}
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Warning</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        confirm delete
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button id="btn-delete-blogs" type="button" class="btn btn-danger">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{!-- form hidden action delete --}}
+{{!-- tạo thẻ form ẩn để xác thực phương thức delete --}}
+    <form METHOD="POST" name="form-delete-blogs"></form>
+
+{{!-- confirm delete js --}}
+<script>
+  document.addEventListener( 'DOMContentLoaded', function() {
+    const exampleModal = document.getElementById('exampleModal')
+    var dataId;
+    var formDeleteBlogs = document.forms['form-delete-blogs'];
+    const containerForm = document.forms['container-form']
+    var checkboxAll = $('#checkbox-all');
+    var itemCheckbox = $("input[name='blogIDs[]']");
+    const btnDeleteBlogs = document.getElementById('btn-delete-blogs');
+    const checkedSubmitBtn = $('.checked-submit-btn');
+    if (exampleModal) {
+      exampleModal.addEventListener('show.bs.modal', event => {
+        // Button that triggered the modal
+        const button = event.relatedTarget
+        // Extract info from data-bs-* attributes
+        dataId = button.getAttribute('data-id')
+      })
+    }
+    btnDeleteBlogs.addEventListener("click",function() {
+      formDeleteBlogs.action = '/blogs/' + dataId + '?_method=DELETE';
+      formDeleteBlogs.submit()
+    })
+    // checkbox all change
+    checkboxAll.change(function() {
+      const isCheckboxAll = $(this).prop('checked')
+      if(isCheckboxAll) {
+        itemCheckbox.prop('checked', true)
+      } else {
+        itemCheckbox.prop('checked', false)
+      }
+      renderCheckedBtn()
+    })
+    //item checkbox change
+    itemCheckbox.change(function() {
+      const isCheckedAll = itemCheckbox.length === $('input[name="blogIDs[]"]:checked').length
+      checkboxAll.prop('checked', isCheckedAll)
+      renderCheckedBtn()
+    })
+    // submit btn 
+    function renderCheckedBtn() {
+      const checkedCount = $('input[name="blogIDs[]"]:checked').length
+      if(checkedCount > 0) {
+        checkedSubmitBtn.prop('disabled', false);
+      } else {
+        checkedSubmitBtn.prop('disabled',true);
+      }
+    }
+    // 
+  })
+  
+  /**
+  * peusedo checked
+  */
+</script>
+
+
+{{!-- 
+      if(checkedCount > 0) {
+        checkedSubmitBtn.prop('disabled',false);
+      } else {
+        checkedSubmitBtn.prop('disabled', true);
+      }
+
+
+      //
+
+    checkedSubmitBtn.click(function(e) {
+      e.preventDefault();
+      var isSubmitable = !$(this).is(':disabled');
+      console.log(isSubmitable)
+      if(isSubmitable) {
+        containerForm.submit()
+      }
+    })
+
+ --}}

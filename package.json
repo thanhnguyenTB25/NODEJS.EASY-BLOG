@@ -1,7 +1,12 @@
 {
   "dependencies": {
     "express": "^4.19.2",
-    "express-handlebars": "^7.1.2"
+    "express-handlebars": "^7.1.2",
+    "method-override": "^3.0.0",
+    "mongoose": "^8.3.2",
+    "mongoose-delete": "^1.0.2",
+    "mongoose-slug-updater": "^3.3.0",
+    "supervisor": "^0.12.0"
   },
   "devDependencies": {
     "morgan": "^1.10.0",
@@ -13,8 +18,9 @@
   "main": "src/main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "sass --watch src/scss/app.scss : src/public/css/",
-    "dev": "nodemon --inspect src/main.js"
+    "watch": "sass --watch src/scss/app.scss:src/public/css/app.css",
+    "dev": "nodemon src/main.js",
+    "start": "supervisor src/main.js"
   },
   "author": "\"ThanhNguyen\"",
   "license": "ISC",

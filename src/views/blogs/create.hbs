@@ -1,0 +1,26 @@
+<div class="mt-4">
+    <h1>Create course</h1>
+    {{!--search: form behavior --}}
+    <form METHOD="POST" action="/blogs/store">
+        <div class="mb-3">
+            <label for="name" class="form-label">Name course</label>
+            <input type="text" class="form-control" id="name" placeholder="Phần mô tả..." name="name">
+        </div>
+        <div class="mb-3">
+            <label for="description" class="form-label">descripts</label>
+            <input type="text" class="form-control" id="description" placeholder="Phần mô tả..." name="description">
+        </div>
+        <div class="mb-3">
+            <label for="videoID" class="form-label">videoID</label>
+            <input type="text" class="form-control" id="videoID" placeholder="Phần mô tả..." name="videoID">
+        </div>
+
+        <div class="mb-3">
+            <label for="level" class="form-label">Level</label>
+            <input type="text" class="form-control" id="level" placeholder="Phần mô tả..." name="level">
+        </div>
+        <div class="mb-3">
+            <button type="submit" class="btn btn-primary">Add course</button>
+        </div>
+    </form>
+</div>

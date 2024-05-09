@@ -1,0 +1,26 @@
+<div class="mt-4">
+    <h1>update course</h1>
+    {{!--search: form behavior --}}
+    <form METHOD="POST" action="/blogs/{{blogs._id}}?_method=PUT">
+        <div class="mb-3">
+            <label for="name" class="form-label">Name course</label>
+            <input type="text" class="form-control" value="{{blogs.name}}" id="name" placeholder="Phần mô tả..." name="name">
+        </div>
+        <div class="mb-3">
+            <label for="description" class="form-label">descripts</label>
+            <textarea class="form-control" id="description" name="description">{{blogs.description}}</textarea>
+        </div>
+        <div class="mb-3">
+            <label for="videoID" class="form-label">videoID</label>
+            <input type="text" class="form-control" value="{{blogs.videoID}}" id="videoID" placeholder="Phần mô tả..." name="videoID">
+        </div>
+
+        <div class="mb-3">
+            <label for="level" class="form-label">Level</label>
+            <input type="text" class="form-control" value="{{blogs.level}}" id="level" placeholder="Phần mô tả..." name="level">
+        </div>
+        <div class="mb-3">
+            <button type="submit" class="btn btn-primary">update course</button>
+        </div>
+    </form>
+</div>
